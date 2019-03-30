@@ -7,20 +7,23 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Calculator extends JFrame implements ActionListener {
+public final class Calculator extends JFrame implements ActionListener {
 
     private double operand1;
-    private double displayValue;
-    private Operator operator = null;
+    private boolean isDotPressed = false;
+    private final StringBuilder displayValue;
+    private int operandCount = 0;
+    private Operator previousOperator = null;
     private Display display;
 
-    enum Operator {
+    private enum Operator {
 
         EQUAL, PLUS, MINUS, MULTIPLY, DIVIDE;
     }
 
     public Calculator() {
         super("Calculator");
+        displayValue = new StringBuilder(32);
         initComponents();
         setSize(230, 200);
         setLocationRelativeTo(null);
@@ -38,87 +41,89 @@ public class Calculator extends JFrame implements ActionListener {
         this.add(panel);
     }
 
-    private void pressedNumber(int number) {
-        if (this.operator == Operator.EQUAL) {
-            operator = null;
-            displayValue = 0;
-        }
-
-        if (displayValue == 0 && number == 0) {
-            return;
-        }
-
-        displayValue = displayValue * 10 + number;
-        display.setValue("" + displayValue);
+    private void clearDisplay() {
+        displayValue.delete(0, displayValue.length());
+        display.setValue("0");
     }
-    
+
+    private void pressedNumber(String number) {
+        if (this.previousOperator == Operator.EQUAL) {
+            previousOperator = null;
+            clearDisplay();
+            isDotPressed = false;
+        }
+
+        displayValue.append(number);
+        display.setValue(displayValue.toString());
+    }
+
     private void pressedClear() {
-        displayValue = 0;
-        operator = null;
+        previousOperator = null;
         operand1 = 0;
-        display.setValue("" + displayValue);
+        clearDisplay();
+        operandCount = 0;
+    }
+
+    private void calculate(Operator operator, double b) {
+        switch (operator) {
+            case PLUS:
+                operand1 += b;
+                break;
+            case MINUS:
+                operand1 -= b;
+                break;
+            case MULTIPLY:
+                operand1 *= b;
+                break;
+            case DIVIDE:
+                operand1 /= b;
+                break;
+        }
     }
 
     private void pressedOperator(Operator operator) {
-        if (operator == Operator.EQUAL) {
-            switch (this.operator) {
-                case PLUS:
-                    displayValue = operand1 + displayValue;
-                    break;
-                case MINUS:
-                    displayValue = operand1 - displayValue;
-                    break;
-                case MULTIPLY:
-                    displayValue = operand1 * displayValue;
-                    break;
-                case DIVIDE:
-                    displayValue = operand1 / displayValue;
-                    break;
-            }
-            this.operator = operator;
-        } else {
-            this.operator = operator;
-            operand1 = displayValue;
-            displayValue = 0;
-        }
 
-        display.setValue("" + displayValue);
+        double operand2 = displayValue.length() > 0
+                ? Double.parseDouble(displayValue.toString()) : operand1;
+
+        if (operator == Operator.EQUAL) {
+
+            calculate(previousOperator, operand2);
+            operandCount = 0;
+
+        } else {
+            operandCount++;
+            if (operandCount > 1) {
+                calculate(operator, operand2);
+            }else{
+                operand1 = operand2;
+            }
+            clearDisplay();
+        }
+        if (isDotPressed) {
+            display.setValue("" + operand1);
+        } else {
+            display.setValue("" + (long) operand1);
+        }
+        this.previousOperator = operator;
     }
 
-    @Override  
+    @Override
     public void actionPerformed(ActionEvent e) {
 
         JButton src = (JButton) e.getSource();
         switch (src.getText()) {
             case "0":
-                pressedNumber(0);
-                break;
             case "1":
-                pressedNumber(1);
-                break;
             case "2":
-                pressedNumber(2);
-                break;
             case "3":
-                pressedNumber(3);
-                break;
             case "4":
-                pressedNumber(4);
-                break;
             case "5":
-                pressedNumber(5);
-                break;
             case "6":
-                pressedNumber(6);
-                break;
             case "7":
-                pressedNumber(7);
-                break;
             case "8":
-                pressedNumber(8);
-                break;
             case "9":
-                pressedNumber(9);
+                pressedNumber(src.getText());
                 break;
 
             case "=":
@@ -136,10 +141,15 @@ public class Calculator extends JFrame implements ActionListener {
             case "/":
                 pressedOperator(Operator.DIVIDE);
                 break;
+            case ".":
+                if (!isDotPressed) {
+                    isDotPressed = true;
+                    displayValue.append('.');
+                }
+                break;
             case "C":
                 pressedClear();
                 break;
-
         }
     }
 }
