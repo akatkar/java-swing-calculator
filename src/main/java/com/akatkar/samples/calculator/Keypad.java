@@ -15,7 +15,7 @@ public class Keypad extends JPanel{
     }
     
     private final String[][] keyMap = {
-        {"(",")","%","C"},
+        {"M+","M-","%","C"},
         {"7","8","9","/"},
         {"4","5","6","x"},
         {"1","2","3","-"},
