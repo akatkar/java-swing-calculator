@@ -33,7 +33,9 @@ class Display extends JPanel {
     }
 
     double getValue() {
-        return Double.parseDouble(displayValue.toString());
+        double value = Double.parseDouble(displayValue.toString());
+        this.clear();
+        return value;
     }
 
     void append(String number) {

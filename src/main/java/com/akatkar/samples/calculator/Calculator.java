@@ -13,9 +13,7 @@ public final class Calculator extends JFrame implements ActionListener {
     private static final Pattern DIGIT = Pattern.compile("[\\d]+");
     private static final Pattern OPERATORS = Pattern.compile("[-+x\\/=]");
 
-    private double operand1;
-    private int operandCount = 0;
-    private Operator previousOperator = null;
+    private final Expression expression = new Expression();
     private Display display;
 
     public Calculator() {
@@ -38,41 +36,20 @@ public final class Calculator extends JFrame implements ActionListener {
         this.add(panel);
     }
 
-    private void clearDisplay() {
-        display.clear();
-    }
-
     private void pressedNumber(String number) {
-        if (this.previousOperator == Operator.EQUAL) {
-            previousOperator = null;
-            clearDisplay();
-        }
-
         display.append(number);
     }
 
     private void pressedClear() {
-        previousOperator = null;
-        operand1 = 0;
-        clearDisplay();
-        operandCount = 0;
+        expression.clear();
+        display.clear();
     }
 
     private void pressedOperator(Operator operator) {
-
-        double operand2 = display.hasValue() ? display.getValue() : operand1;
-
-        if (operator == Operator.EQUAL) {
-            operand1 = previousOperator.apply(operand1, operand2);
-            operandCount = 0;
-
-        } else {
-            operandCount++;
-            operand1 = operandCount > 1 ? operator.apply(operand1, operand2):operand2;
-            clearDisplay();
-        }
-        display.setValue(operand1);
-        previousOperator = operator;
+        double result = display.hasValue()
+                ? expression.calculate(operator, display.getValue())
+                : expression.calculate(operator);
+        display.setValue(result);
     }
 
     @Override

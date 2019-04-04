@@ -4,18 +4,20 @@ This is the Swing GUI demonstration code.
 
 Code will be improved step by step. 
 
-# STEP 7 : Refactored switch in calculate (pressedOperator)  
- - DoubleBinaryOperator added into Operator enum as final field
- - We had to add constructor of enum as well
- - Now we had to add lambda for each instance of enum
- - We add an apply method to be able to call lambda methods
- - In Calculator class, Now we don't need calculate method, so removed (switch removed)
- - In pressedOperator, we called operator.apply method to be able to calculate
-      
-# Current Status at Step 7  
+# STEP 8 : Refactored calculation  
+ - Expression class defined and all calculation moved to this class
+ - In Calculator class; operand1, operandCount and previousOperator fields removed
+ - Expression field add instead of them
+ - if block completely removed in pressedNumber method
+ - expression.clear() called in pressedClear() 
+ - clearDisplay method removed and display.clear() called in pressedClear() directly
+ - display also must be cleared when getValue method called because we removed from pressedNumber
+ - added clear() in Display.getValue method  
+ - main usage of expression in pressedOperator method. This method now shorter 
+   
+# Current Status at Step 8  
 ## Code smells to be able to refactor
  - In Calculator class; if-else block in actionPerformed should be removed
- - All calculation logic can be extracted into a class
  
 ## New features to be able to add
  - The keys ".", "M+", "M-" and "%" are not working. 
@@ -25,5 +27,7 @@ Code will be improved step by step.
  - GUI should not be enlarged, resize must be prevented 
    
 # What can be done in next step?
- - refactor calculation logic
- - Calculation can be performed in a separate class
+ - in pressedOperator method, Display.hasValue called
+ - This behaviour exactly same with Optional
+ - refactor this code using Optional instead of checking if value exists
+ 
