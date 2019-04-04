@@ -4,15 +4,17 @@ This is the Swing GUI demonstration code.
 
 Code will be improved step by step. 
 
-# STEP 9 : Refactored Display getValue with Optional returns  
- - in Display class, hasValue became private
- - in Display class, getValue changed as return Optional<Double>
- - in Expression class, changed calculate methods to be able to accept Optional
- - in Expression class, The method calculate(Operator,double) became private
- - in Calculator class, changed pressedOperator
+# STEP 10 : Refactor Optional from Display.getValue()  
+ Optional<T> is used for Objects so primitives turns to Object to be able to use it
+ So many unnecessary objects are created for this purpose
+ OptionalDouble, for our case, is more suitable to prevent these unnecessary object creation
+ - So "Optional<Double>" changed to "OptionalDouble" as return value in Display.getValue method
+ - In Expression class, we have to change calculate method as well to be able to accept OptionalDouble instead of Optional<Double> 
+ 
+ Performance has been increased now
  
  
-# Current Status at Step 9  
+# Current Status at Step 10  
 ## Code smells to be able to refactor
  - In Calculator class; if-else block in actionPerformed should be removed
  
@@ -24,8 +26,5 @@ Code will be improved step by step.
  - GUI should not be enlarged, resize must be prevented 
    
 # What can be done in next step?
- - This Optional usage added new problem
- - Every getValue calls create a Double object because we have primitive double
- - This object creation is actually unnecessary 
- - Java8 defined for Optionals for primitive as well for better performance
- - So we can refactor Optional<Double> with OptionalDouble to increase performance
+  - Now we can remove if block from actionPerformed in Calculator class 
+  - We will apply Command Pattern to be able to remove this if block

@@ -1,6 +1,6 @@
 package com.akatkar.samples.calculator;
 
-import java.util.Optional;
+import java.util.OptionalDouble;
 
 class Expression {
 
@@ -22,10 +22,8 @@ class Expression {
         return operand;
     }
 
-    double calculate(Operator newOperator, Optional<Double> newOperand) {
-        return newOperand
-                .map(op -> calculate(newOperator, op))
-                .orElseGet(() -> calculate(newOperator, operand));
+    double calculate(Operator newOperator, OptionalDouble newOperand) {
+        return calculate(newOperator, newOperand.orElse(operand));
     }
 
     void clear(){

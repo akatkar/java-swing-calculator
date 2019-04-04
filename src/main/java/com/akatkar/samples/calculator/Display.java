@@ -1,7 +1,7 @@
 package com.akatkar.samples.calculator;
 
 import java.awt.GridLayout;
-import java.util.Optional;
+import java.util.OptionalDouble;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -33,13 +33,13 @@ class Display extends JPanel {
                 : Long.toString((long) value));
     }
 
-    Optional<Double> getValue() {
+    OptionalDouble getValue() {
         if(hasValue()){
             double value = Double.parseDouble(displayValue.toString());
             this.clear();
-            return Optional.of(value);
+            return OptionalDouble.of(value);
         }
-        return Optional.empty();
+        return OptionalDouble.empty();
     }
 
     void append(String number) {
