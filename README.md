@@ -4,22 +4,19 @@ This is the Swing GUI demonstration code.
 
 Code will be improved step by step. 
 
-# STEP 12 : Refactored verbosity which created at previous step  
- In Calculator class, all pressed methods must be similar signature
-   So we can use generic lambda for them 
-  - The parameter of pressedOperator changed to String 
-  - String parameter added to pressedDot and pressedClear methods even if never used
+# STEP 13 : Refactored if block - removed completely  
+ - To be able to remove if block we need to know a key with caption and action at same time
+ - We can achieve this purpose using enum 
+ - We defined an enum called KeyType and its constructor accepts caption and action as BiConsumer
+ - KeyMap rewritten with KeyType enum (added a static import to be able use names directly)
+ - Constructor of KeyButton class changed to accept KeyType
+ - Now we can create all Keys without need an if block
+ - initComponents changed to create Keys according to KeyButton constructor
+ - No need DIGIT and OPERATORS patterns now, they are deleted    
   
- In Display Class,
-  - We defined a KeyButton class which constructs with caption and BiConsumer as action
-  - BiConsumer<Calculator, String> can be used Calculator method's reference like Calculator::pressedNumber
-  - But we had to pressedEmpty method into Calculator class for unused Keys, so added into Calculator class
-  - KeyButton class has a getKey method which returns a Key with action according to its caption
-  - if block moved to getKey method
- 
-# Current Status at Step 12  
+# Current Status at Step 13  
 ## Code smells to be able to refactor
- - The if block now transferred to Keypad.KeyButton.getKey method, it should be removed 
+ - NONE
  
 ## New features to be able to add
  - The keys ".", "M+", "M-" and "%" are not working. 
@@ -29,9 +26,4 @@ Code will be improved step by step.
  - GUI should not be enlarged, resize must be prevented 
    
 # What can be done in next step?
-- if-block can be removed completely
-- if block is using to be able to define both caption and behaviour
-- This definition can be performed by an enum
-- So we can define an enum called Key like Operator and each key knows both its action and caption
-- We can create KeyButton instances with this enum values without using if 
- 
+  - In Keypad class, for loop removed using functional approach
