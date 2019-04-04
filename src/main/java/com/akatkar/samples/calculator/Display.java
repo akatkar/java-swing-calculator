@@ -4,10 +4,10 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Display extends JPanel {
+class Display extends JPanel {
     private JTextField display;
 
-    public Display() {
+    Display() {
         initComponents();
     }
     
@@ -19,7 +19,7 @@ public class Display extends JPanel {
         this.add(display);
     }
 
-    public void setValue(String value) {
+    void setValue(String value) {
         this.display.setText(value);
     } 
 }

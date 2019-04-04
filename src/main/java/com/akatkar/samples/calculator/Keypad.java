@@ -5,11 +5,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Keypad extends JPanel{
+class Keypad extends JPanel{
     
     private final ActionListener actionListener;
     
-    public Keypad(ActionListener actionListener){
+    Keypad(ActionListener actionListener){
         this.actionListener = actionListener;
         initComponents();
     }
