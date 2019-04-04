@@ -1,6 +1,7 @@
 package com.akatkar.samples.calculator;
 
 import java.awt.GridLayout;
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,11 +20,10 @@ class Keypad extends JPanel {
     private void initComponents() {
         this.setLayout(new GridLayout(keyMap.length, keyMap.length));
 
-        for (Key[] line : keyMap) {
-            for (Key key : line) {
-                this.add(new KeyButton(key));
-            }
-        }
+        Arrays.stream(keyMap)
+                .flatMap(Arrays::stream)
+                .map(KeyButton::new)
+                .forEach(this::add);
     }
 
     private final Key[][] keyMap = {
