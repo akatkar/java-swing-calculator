@@ -1,6 +1,6 @@
 package com.akatkar.samples.calculator;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.function.BiConsumer;
 import javax.swing.JButton;
@@ -42,6 +42,8 @@ class Keypad extends JPanel {
             super(key.toString());
             this.addActionListener(calculator);
             this.consumer = key.getAction();
+            setFont(new Font("Consolas", Font.BOLD, 30));
+            setFocusable(false);
         }
 
         @Override

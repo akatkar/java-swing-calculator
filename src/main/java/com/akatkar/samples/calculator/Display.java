@@ -1,6 +1,6 @@
 package com.akatkar.samples.calculator;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.OptionalDouble;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -19,7 +19,10 @@ class Display extends JPanel {
         this.setLayout(new GridLayout(1, 1));
 
         display = new JTextField("0");
+        display.setFont(new Font("Consolas", Font.PLAIN, 40));
+        display.setFocusable(false);
         display.setHorizontalAlignment(JTextField.RIGHT);
+        display.setMaximumSize(display.getPreferredSize());
         this.add(display);
     }
 
