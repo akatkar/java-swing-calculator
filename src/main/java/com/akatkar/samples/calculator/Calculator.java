@@ -58,39 +58,17 @@ public final class Calculator extends JFrame implements ActionListener {
         operandCount = 0;
     }
 
-    private void calculate(Operator operator, double b) {
-        switch (operator) {
-            case PLUS:
-                operand1 += b;
-                break;
-            case MINUS:
-                operand1 -= b;
-                break;
-            case MULTIPLY:
-                operand1 *= b;
-                break;
-            case DIVIDE:
-                operand1 /= b;
-                break;
-        }
-    }
-
     private void pressedOperator(Operator operator) {
 
         double operand2 = display.hasValue() ? display.getValue() : operand1;
 
         if (operator == Operator.EQUAL) {
-
-            calculate(previousOperator, operand2);
+            operand1 = previousOperator.apply(operand1, operand2);
             operandCount = 0;
 
         } else {
             operandCount++;
-            if (operandCount > 1) {
-                calculate(operator, operand2);
-            } else {
-                operand1 = operand2;
-            }
+            operand1 = operandCount > 1 ? operator.apply(operand1, operand2):operand2;
             clearDisplay();
         }
         display.setValue(operand1);
