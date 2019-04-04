@@ -10,8 +10,6 @@ import javax.swing.JPanel;
 public final class Calculator extends JFrame implements ActionListener {
 
     private double operand1;
-    private boolean isDotPressed = false;
-    private final StringBuilder displayValue;
     private int operandCount = 0;
     private Operator previousOperator = null;
     private Display display;
@@ -23,7 +21,6 @@ public final class Calculator extends JFrame implements ActionListener {
 
     public Calculator() {
         super("Calculator");
-        displayValue = new StringBuilder(32);
         initComponents();
         setSize(230, 200);
         setLocationRelativeTo(null);
@@ -43,19 +40,17 @@ public final class Calculator extends JFrame implements ActionListener {
     }
 
     private void clearDisplay() {
-        displayValue.delete(0, displayValue.length());
-        display.setValue("0");
+        display.clear();
     }
 
     private void pressedNumber(String number) {
         if (this.previousOperator == Operator.EQUAL) {
             previousOperator = null;
             clearDisplay();
-            isDotPressed = false;
+            display.clearDot();
         }
 
-        displayValue.append(number);
-        display.setValue(displayValue.toString());
+        display.append(number);
     }
 
     private void pressedClear() {
@@ -84,8 +79,7 @@ public final class Calculator extends JFrame implements ActionListener {
 
     private void pressedOperator(Operator operator) {
 
-        double operand2 = displayValue.length() > 0
-                ? Double.parseDouble(displayValue.toString()) : operand1;
+        double operand2 = display.hasValue() ? display.getValue() : operand1;
 
         if (operator == Operator.EQUAL) {
 
@@ -101,12 +95,8 @@ public final class Calculator extends JFrame implements ActionListener {
             }
             clearDisplay();
         }
-        if (isDotPressed) {
-            display.setValue("" + operand1);
-        } else {
-            display.setValue("" + (long) operand1);
-        }
-        this.previousOperator = operator;
+        display.setValue(operand1);
+        previousOperator = operator;
     }
 
     @Override
@@ -143,10 +133,7 @@ public final class Calculator extends JFrame implements ActionListener {
                 pressedOperator(Operator.DIVIDE);
                 break;
             case ".":
-                if (!isDotPressed) {
-                    isDotPressed = true;
-                    displayValue.append('.');
-                }
+                display.dotPressed();
                 break;
             case "C":
                 pressedClear();
