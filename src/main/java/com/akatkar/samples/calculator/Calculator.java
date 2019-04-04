@@ -35,17 +35,22 @@ public final class Calculator extends JFrame implements ActionListener {
         display.append(number);
     }
 
-    void pressedClear() {
+    void pressedClear(String clear) {
         expression.clear();
         display.clear();
     }
 
-    void pressedOperator(Operator operator) {
-        display.setValue(expression.calculate(operator, display.getValue()));
+    void pressedOperator(String operator) {
+        Operator.fromString(operator)
+                .map(op->expression.calculate(op,display.getValue()))
+                .ifPresent(display::setValue);
     }
 
-    void pressedDot() {
+    void pressedDot(String dot) {
         display.dotPressed();
+    }
+
+    void pressedEmpty(String empty){
     }
 
     @Override
