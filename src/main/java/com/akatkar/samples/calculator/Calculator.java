@@ -2,6 +2,7 @@ package com.akatkar.samples.calculator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Pattern;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,15 +10,13 @@ import javax.swing.JPanel;
 
 public final class Calculator extends JFrame implements ActionListener {
 
+    private static final Pattern DIGIT = Pattern.compile("[\\d]+");
+    private static final Pattern OPERATORS = Pattern.compile("[-+x\\/=]");
+
     private double operand1;
     private int operandCount = 0;
     private Operator previousOperator = null;
     private Display display;
-
-    private enum Operator {
-
-        EQUAL, PLUS, MINUS, MULTIPLY, DIVIDE;
-    }
 
     public Calculator() {
         super("Calculator");
@@ -89,7 +88,7 @@ public final class Calculator extends JFrame implements ActionListener {
             operandCount++;
             if (operandCount > 1) {
                 calculate(operator, operand2);
-            }else{
+            } else {
                 operand1 = operand2;
             }
             clearDisplay();
@@ -102,41 +101,15 @@ public final class Calculator extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         JButton src = (JButton) e.getSource();
-        switch (src.getText()) {
-            case "0":
-            case "1":
-            case "2":
-            case "3":
-            case "4":
-            case "5":
-            case "6":
-            case "7":
-            case "8":
-            case "9":
-                pressedNumber(src.getText());
-                break;
-
-            case "=":
-                pressedOperator(Operator.EQUAL);
-                break;
-            case "+":
-                pressedOperator(Operator.PLUS);
-                break;
-            case "-":
-                pressedOperator(Operator.MINUS);
-                break;
-            case "x":
-                pressedOperator(Operator.MULTIPLY);
-                break;
-            case "/":
-                pressedOperator(Operator.DIVIDE);
-                break;
-            case ".":
-                display.dotPressed();
-                break;
-            case "C":
-                pressedClear();
-                break;
+        String token = src.getText();
+        if (DIGIT.matcher(token).matches()) {
+            pressedNumber(token);
+        } else if (OPERATORS.matcher(token).matches()) {
+            pressedOperator(Operator.fromString(token).get());
+        } else if ("C".equals(token)) {
+            pressedClear();
+        } else if (".".equals(token)){
+            display.dotPressed();
         }
     }
 }
