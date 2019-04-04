@@ -46,10 +46,7 @@ public final class Calculator extends JFrame implements ActionListener {
     }
 
     private void pressedOperator(Operator operator) {
-        double result = display.hasValue()
-                ? expression.calculate(operator, display.getValue())
-                : expression.calculate(operator);
-        display.setValue(result);
+        display.setValue(expression.calculate(operator, display.getValue()));
     }
 
     @Override

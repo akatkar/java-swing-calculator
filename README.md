@@ -4,18 +4,15 @@ This is the Swing GUI demonstration code.
 
 Code will be improved step by step. 
 
-# STEP 8 : Refactored calculation  
- - Expression class defined and all calculation moved to this class
- - In Calculator class; operand1, operandCount and previousOperator fields removed
- - Expression field add instead of them
- - if block completely removed in pressedNumber method
- - expression.clear() called in pressedClear() 
- - clearDisplay method removed and display.clear() called in pressedClear() directly
- - display also must be cleared when getValue method called because we removed from pressedNumber
- - added clear() in Display.getValue method  
- - main usage of expression in pressedOperator method. This method now shorter 
-   
-# Current Status at Step 8  
+# STEP 9 : Refactored Display getValue with Optional returns  
+ - in Display class, hasValue became private
+ - in Display class, getValue changed as return Optional<Double>
+ - in Expression class, changed calculate methods to be able to accept Optional
+ - in Expression class, The method calculate(Operator,double) became private
+ - in Calculator class, changed pressedOperator
+ 
+ 
+# Current Status at Step 9  
 ## Code smells to be able to refactor
  - In Calculator class; if-else block in actionPerformed should be removed
  
@@ -27,7 +24,8 @@ Code will be improved step by step.
  - GUI should not be enlarged, resize must be prevented 
    
 # What can be done in next step?
- - in pressedOperator method, Display.hasValue called
- - This behaviour exactly same with Optional
- - refactor this code using Optional instead of checking if value exists
- 
+ - This Optional usage added new problem
+ - Every getValue calls create a Double object because we have primitive double
+ - This object creation is actually unnecessary 
+ - Java8 defined for Optionals for primitive as well for better performance
+ - So we can refactor Optional<Double> with OptionalDouble to increase performance

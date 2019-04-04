@@ -1,6 +1,7 @@
 package com.akatkar.samples.calculator;
 
 import java.awt.GridLayout;
+import java.util.Optional;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -32,10 +33,13 @@ class Display extends JPanel {
                 : Long.toString((long) value));
     }
 
-    double getValue() {
-        double value = Double.parseDouble(displayValue.toString());
-        this.clear();
-        return value;
+    Optional<Double> getValue() {
+        if(hasValue()){
+            double value = Double.parseDouble(displayValue.toString());
+            this.clear();
+            return Optional.of(value);
+        }
+        return Optional.empty();
     }
 
     void append(String number) {
@@ -43,7 +47,7 @@ class Display extends JPanel {
         display.setText(displayValue.toString());
     }
 
-    boolean hasValue() {
+    private boolean hasValue() {
         return displayValue.length() > 0;
     }
 

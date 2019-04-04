@@ -1,13 +1,14 @@
 package com.akatkar.samples.calculator;
 
+import java.util.Optional;
+
 class Expression {
 
     private double operand;
-    private int operandCount = 0;
-
+    private int operandCount;
     private Operator operator = null;
 
-    double calculate(Operator newOperator, double newOperand) {
+    private double calculate(Operator newOperator, double newOperand) {
 
         if (newOperator == Operator.EQUAL) {
             operand = this.operator.apply(operand, newOperand);
@@ -21,8 +22,10 @@ class Expression {
         return operand;
     }
 
-    double calculate(Operator newOperator) {
-        return calculate(newOperator, operand);
+    double calculate(Operator newOperator, Optional<Double> newOperand) {
+        return newOperand
+                .map(op -> calculate(newOperator, op))
+                .orElseGet(() -> calculate(newOperator, operand));
     }
 
     void clear(){
