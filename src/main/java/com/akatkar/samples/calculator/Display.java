@@ -7,7 +7,6 @@ import javax.swing.JTextField;
 class Display extends JPanel {
 
     private JTextField display;
-    private boolean isDotPressed = false;
     private final StringBuilder displayValue;
 
     Display() {
@@ -23,10 +22,14 @@ class Display extends JPanel {
         this.add(display);
     }
 
+    private boolean hasFraction(double value) {
+        return Math.round(value) != value;
+    }
+
     void setValue(double value) {
-        display.setText(isDotPressed
+        display.setText(hasFraction(value)
                 ? Double.toString(value)
-                : Long.toString((long)value));
+                : Long.toString((long) value));
     }
 
     double getValue() {
@@ -47,14 +50,8 @@ class Display extends JPanel {
         display.setText("0");
     }
 
-    void dotPressed(){
-        if(!isDotPressed){
-            isDotPressed = true;
+    void dotPressed() {
+        if (displayValue.indexOf(".") == -1)
             displayValue.append('.');
-        }
-    }
-
-    void clearDot() {
-        isDotPressed = false;
     }
 }

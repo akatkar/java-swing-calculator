@@ -47,7 +47,6 @@ public final class Calculator extends JFrame implements ActionListener {
         if (this.previousOperator == Operator.EQUAL) {
             previousOperator = null;
             clearDisplay();
-            display.clearDot();
         }
 
         display.append(number);
